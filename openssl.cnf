@@ -1,0 +1,64 @@
+[ ca ]
+default_ca = CA_default
+
+[ CA_default ]
+dir = ./CA
+database = $dir/index.txt
+new_certs_dir = $dir/newcerts
+certificate = $dir/ca.crt
+private_key = $dir/ca.key
+serial = $dir/serial
+crlnumber = $dir/crlnumber
+default_md = sha256
+default_days = 365
+default_crl_days = 30
+policy = policy_local
+unique_subject = no
+copy_extensions = none
+x509_extensions = usuario
+crl_extensions = crl_ext
+
+[ policy_local ]
+countryName = optional
+stateOrProvinceName = optional
+localityName = optional
+organizationName = optional
+organizationalUnitName = optional
+commonName = supplied
+
+[ req ]
+prompt = no
+distinguished_name = root_dn
+x509_extensions = root_ca
+default_md = sha256
+
+[ root_dn ]
+C = AR
+ST = Buenos Aires
+L = San Justo
+O = UNLaM
+OU = Matematica Aplicada
+CN = UNLaM Root CA - Practica
+
+[ root_ca ]
+basicConstraints = critical, CA:true, pathlen:0
+keyUsage = critical, keyCertSign, cRLSign
+subjectKeyIdentifier = hash
+authorityKeyIdentifier = keyid:always
+
+[ usuario ]
+basicConstraints = critical, CA:false
+keyUsage = critical, digitalSignature
+subjectKeyIdentifier = hash
+authorityKeyIdentifier = keyid,issuer
+
+[ servidor ]
+basicConstraints = critical, CA:false
+keyUsage = critical, digitalSignature, keyEncipherment
+extendedKeyUsage = serverAuth
+subjectAltName = DNS:criptografia-unlam.com
+subjectKeyIdentifier = hash
+authorityKeyIdentifier = keyid,issuer
+
+[ crl_ext ]
+authorityKeyIdentifier = keyid:always
